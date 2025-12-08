@@ -1,5 +1,6 @@
 import React from 'react'
 import { useAuth } from '../../context/authcontext'
+import axios from 'axios'
 
 const Navbar = () => {
   const { user, logout } = useAuth()
