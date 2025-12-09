@@ -13,6 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+// go to register
   const Register = ()=>{
     navigate('/register')
   }
@@ -22,7 +23,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/login", {
+      const response = await axios.post("http://localhost:8000/api/v1/users/login", {
         email,
         password,
         role: loginType

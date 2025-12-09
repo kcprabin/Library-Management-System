@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asynchandler.js";
 import { User } from "../models/user.model.js";
-import bcrypt from "bcrypt"
+
+
 
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -58,5 +59,49 @@ const registerUser = asyncHandler(async (req, res) => {
       
 });
 
+// login User
+const loginUser= asyncHandler(
+    async (req,res) =>{
+        // check ussername and login info
+        const {studentemail,Password} = req.body
 
-export default registerUser;
+        // check empty or not 
+       if(!studentemail|| !Password ){
+        return res.status(400).json({
+            messege:"empty string"
+        })
+       }
+
+       // check user 
+       const existUser = await User.findOne({
+        studentemail1:studentemail
+       })
+
+       if(!existUser){
+        res.status(400).json({
+            message:"Not user"
+        })
+       }
+
+       // validate
+       const Validate = await bcrypt.compare(Password,existUser.password1) 
+
+       if(!Validate){
+        res.status(400).json({
+            messege:"Wrong password"
+        })
+       }
+
+       return res.status(200).json({
+        message:"Login sucessfull" ,
+        user:{
+            id: existUser._id,
+            email:existUser.studentemail1
+        }
+       })
+
+    })
+
+
+
+export default {registerUser,loginUser};
