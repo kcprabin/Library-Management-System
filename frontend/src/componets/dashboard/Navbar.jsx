@@ -2,15 +2,11 @@ import React from 'react'
 import { useAuth } from '../../context/authcontext'
 import { useNavigate } from 'react-router-dom'
 
-
+// yo code base ma logout not working fix quick
 
 const Navbar = () => {
   const { user, logout } = useAuth()
-  //  const lol = useNavigate()
-  //  const signout = ()=>{
-  //         lol("/login")
-  //       }
-  
+ 
   return (
     <div className='flex items-center justify-between h-12 bg-teal-600 px-6 text-white shadow-md'>
       <p className='text-lg font-semibold'>Welcome, {user?.name || 'Admin'}</p>
