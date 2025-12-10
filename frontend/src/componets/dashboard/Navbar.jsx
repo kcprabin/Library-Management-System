@@ -9,15 +9,10 @@ const Navbar = () => {
  
   return (
     <div className='flex items-center justify-between h-12 bg-teal-600 px-6 text-white shadow-md'>
-      <p className='pl-69 text-lg font-semibold'>Welcome, {data.length > 0 ? data[0]?.name : 'Admin'}
-</p>
-
+      <p className='text-lg font-semibold'>Welcome, {user?.name || 'Admin'}</p>
       <button 
-         onClick={() => {
-    logout();
-    navigate('/login'); 
+        onClick={logout}
         className='bg-teal-700 hover:bg-teal-800 px-4 py-2 rounded-md transition-colors duration-200'
-         }}
       >
         Logout
       </button>

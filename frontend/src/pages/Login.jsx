@@ -1,7 +1,7 @@
-import React, { useState,useContext} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-import { AuthContext} from '../context/authcontext';
+import { useAuth } from '../context/authcontext';
 
 
 const Login = () => {
@@ -11,8 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } =useContext(AuthContext);
-  
+  const { login } = useAuth();
 
 // go to register
   const Register = ()=>{
@@ -147,7 +146,7 @@ const Login = () => {
           </div>
 
           {loginType === 'student' && (
-            <div className="mt-6 text-center"  >
+            <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
                 <button onClick={Register} type="button" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">

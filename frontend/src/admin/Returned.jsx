@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AdminReturned = () => {
+const Returned = () => {
   return (
     <div>
       <div className="p-6">
@@ -13,4 +13,4 @@ const AdminReturned = () => {
   )
 }
 
-export default AdminReturned
+export default Returned
