@@ -26,11 +26,8 @@ app.use('/api/v1/users',Userrouter)
 
 // user books register or CRUD operation
 import BookRouter from './routes/book.routes.js'
-app.use('/api/v1/books',BookRouter)
+app.use('/api/v1/admin-dashboard',BookRouter)
 
-// default routes
-import router from './routes/user.routes.js';
-app.use('/api/v1',router)
 
 
 

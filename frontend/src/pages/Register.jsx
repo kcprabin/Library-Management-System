@@ -137,6 +137,7 @@ const Register = () => {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'
                 } disabled:opacity-50`}
               >
+
                 Student
               </button>
               <button

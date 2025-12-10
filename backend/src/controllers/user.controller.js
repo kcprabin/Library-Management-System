@@ -3,128 +3,112 @@ import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt"
 
 const registerUser = asyncHandler(async (req, res) => {
-    //Handle user inputs from frontend
-    const { Username, Name, Password, Kuid } = req.body;
-    // validating user
-    if (
-        [Username, Name, Password, Kuid].some((userinfo) => userinfo?.trim() == "")
-    ) {
-        console.log('Error in data sending format')
-    }
+    
 
-    // recheck user existance
-    const userCreated = await User.findOne({
-        Kuid
-    })
+    
+    //Handle user inputs from frontend as objects 
+    const {studentemail , Password , role} = req.body
+    console.log(studentemail)
+    console.log(Password)
+    
+    
 
-    if (userCreated) {
-        console.log('Already user with same id')
-    }
-    // data entry in database as object
-
-    const user = await User.create({
-        Username,
-        Name,
-        Kuid,
-        Password
-    })
-
-
-    return res.status(200).json({
-        message:"User Created sucessfully"
-    })
-
-
-
-
-
-});
-
-const loginUser = asyncHandler(
-     async (req, res) => {
-    // get login data
-    const {kuid, password } = req.body;
-
-   // match ku id
-    const findUser = await User.findOne({
-        kuid:findUserKuid
-    })
-    if(findUser){
-        console.log("okey")
-    }
-    if(!findUser){
-        res.status(400).json({
-            message:"no user found"
+    // validations of correct format for empty
+    if(Object.values({studentemail,Password}).some(data =>String(data)?.trim()=="" )){
+        return res.status(400).json({
+            message:"Empty feild"
         })
     }
-
-    const Ismatched = await bcrypt.compare(password,findUser.Password)
-
-
-    if(!Ismatched){
-        return res.status(500).json({
-        message:"incorrect password"
+        
+    
+    // email formatiing check
+    const gmailFormat = /^.*@gmail\.com$/;
+    if(!gmailFormat.test(studentemail)){
+       return res.status(400).json({
+        message:"not in format"
        })
     }
-    
-    if(Ismatched){
-       res.status(100).json({
-        message:" password correct "
+
+
+    //checking if already exists 
+    const userExists = await User.findOne({
+        studentemail})
+
+        if(userExists){
+        return res.status(409).json({
+        messege:"lode23"
        })
-    } 
-
-
+     }
+     // hashing password
+     const hashedPass = await bcrypt.hash(Password,10);
+ 
+     // saving data in database 
+    const NewUser =  await User.create({
+        studentemail1:studentemail  ,
+        password1:Password  ,
+        role:role
+    })
 
     
+    return res.status(201).json({
+        messege:"User created",
+        user : NewUser
+      })
+
+    
+
+      
 });
-export {registerUser,
-    loginUser
 
-}
+// login User
+const loginUser= asyncHandler(
+    async (req,res) =>{
+        // check ussername and login info
+        const {studentemail,Password,role} = req.body
+        // check code working 
+        // console.log(studentemail)
+        // console.log(Password)
+
+        // check empty or not 
+       if(!studentemail|| !Password || !role ){
+        return res.status(400).json({
+            messege:"empty string"
+        })
+       }
+
+       // check user and role 
+       const existUser = await User.findOne({
+        studentemail1:studentemail,
+        role:role
+       })
+
+       if(!existUser){
+        res.status(400).json({
+            message:"Not user"
+        })
+       }
+
+       // validate
+       const Validate = await bcrypt.compare(Password,existUser.password1) 
+
+       if(!Validate){
+        res.status(400).json({
+            messege:"Wrong password"
+        })
+       }
+
+       return res.status(200).json({
+        success:true,
+        message:"Login sucessfull" ,
+        user:{
+            id: existUser._id,
+            email:existUser.studentemail1,
+            role: existUser.role
+        }
+       })
+
+    })
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export default registerUser;
+export  {registerUser,loginUser};

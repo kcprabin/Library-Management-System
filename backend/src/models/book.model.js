@@ -20,10 +20,10 @@ const bookSchema = new Schema({
         type:String,
         required:true,
     },
-    Image:{
-        type:String, //cloudnary
-        required:true,
-    },
+    // Image:{
+    //     type:String, //cloudnary
+    //     required:true,
+    // },
     
 
 },{timestamps:true})
