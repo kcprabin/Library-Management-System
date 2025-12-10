@@ -3,7 +3,7 @@ import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import StudentDashboard from "./pages/StudentDashboard"
 import Authcontext from './context/authcontext'
-import CreateUser from './pages/CreateUser'
+import Register from "./pages/Register";
 
 import Members from "./admin/Members";
 import Books from "./admin/AdminBooks";

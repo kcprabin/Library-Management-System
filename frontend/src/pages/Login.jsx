@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { AuthContext} from '../context/authcontext';
 
+
 const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [loginType, setLoginType] = useState('student'); 
@@ -13,20 +14,26 @@ const Login = () => {
   const { login } =useContext(AuthContext);
   
 
+// go to register
+  const Register = ()=>{
+    navigate('/register')
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/login", {
-        email,
-        password,
+      const response = await axios.post("http://localhost:8000/api/v1/users/login", {
+        studentemail: email,
+        Password:  password,
         role: loginType
       });
       
       if(response.data.success) {
         login(response.data.user);
-        alert("Successfully Logged In");
+        // no need to alert user about login user
+        // alert("Successfully Logged In");
         
         if(loginType === 'admin') {
           navigate('/admin-dashboard');
@@ -143,9 +150,7 @@ const Login = () => {
             <div className="mt-6 text-center"  >
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
-                <button type="button" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline" onClick={() => {
-    
-    navigate('/create-account');}}>
+                <button onClick={Register} type="button" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
                   Sign up
                 </button>
               </p>

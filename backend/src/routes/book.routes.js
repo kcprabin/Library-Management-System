@@ -4,7 +4,7 @@ import { registerBook } from "../controllers/book.controller.js";
 const router = Router();
 
 
-router.route("/registerbook").post(registerBook)
+router.route("/books").post(registerBook)
 
 
 
