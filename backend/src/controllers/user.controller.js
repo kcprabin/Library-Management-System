@@ -89,7 +89,7 @@ const loginUser= asyncHandler(
        }
 
        // validate
-       const Validate = await bcrypt.compare(Password,existUser.password1) 
+       const Validate = User.IsPasswordCorrect(Password)
 
        if(!Validate){
         res.status(400).json({
@@ -108,6 +108,12 @@ const loginUser= asyncHandler(
        })
 
     })
+
+const logout = asyncHandler(
+    (req,res)=>{
+        
+    }
+)
 
 
 
