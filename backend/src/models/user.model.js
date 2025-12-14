@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
 //data model for user Students
 const userSchema = new Schema({
@@ -17,6 +18,9 @@ const userSchema = new Schema({
     role:{
         type:String,
         required:true
+    },
+    refreshtoken:{
+        type:String
     }
     
   
@@ -32,6 +36,26 @@ userSchema.pre("save",
    }
 )
 
+// generate accessToken
+userSchema.methods.generateAccessToken = function(){
+    jwt.sign({
+        _id : this._id,
+        studentemail1:this.studentemail1,
+        role:this.role
+    },process.env.ACCESS_TOKEN_SECRECT,{
+expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+    })
+}
+
+// refresh token secrect
+userSchema.methods.generateRefreshToken = function(){
+    jwt.sign({
+        _id: this._id
+    },process.env.REFRESH_TOKEN_SECRECT,{
+        expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+    })
+}
+
 
 
 // check password code 
@@ -39,7 +63,6 @@ userSchema.methods.IsPasswordCorrect = async function (password) {
     return  await bcrypt.compare(password,this.password)
 }
 
-// refresh token baki
-// access token baki 
+
 
 export const User = mongoose.model("user",userSchema)
