@@ -1,122 +1,128 @@
 import { asyncHandler } from "../utils/asynchandler.js";
 import { User } from "../models/user.model.js";
-import bcrypt from "bcrypt"
 
 const registerUser = asyncHandler(async (req, res) => {
+  //Handle user inputs from frontend as objects
+  const { studentemail, Password, role, kuid } = req.body;
 
-    //Handle user inputs from frontend as objects 
-    const {studentemail , Password , role, kuid} = req.body
+  // validations of correct format for empty
+  if (
+    Object.values({ studentemail, Password, kuid }).some(
+      (data) => String(data)?.trim() == ""
+    )
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Empty feild",
+    });
+  }
 
-    // validations of correct format for empty
-    if(Object.values({studentemail,Password,kuid}).some(data =>String(data)?.trim()=="" )){
-        return res.status(400).json({
-            success:false,
-            message:"Empty feild"
-        })
-    }
+  // email formatiing check
+  const gmailFormat = /^.*@gmail\.com$/;
+  if (!gmailFormat.test(studentemail)) {
+    return res.status(400).json({
+      success: false,
+      message: "not in format",
+    });
+  }
 
-    // email formatiing check
-    const gmailFormat = /^.*@gmail\.com$/;
-    if(!gmailFormat.test(studentemail)){
-       return res.status(400).json({
-        success:false,
-        message:"not in format"
-       })
-    }
+  //checking if already exists
+  const userExist = await User.findOne({
+    $or: [{ studentemail: studentemail }, { kuid: kuid }],
+  });
 
-    //checking if already exists 
-    const userExist = await User.findOne({
-        $or:[{studentemail:studentemail}, {kuid:kuid}]
-} )
+  if (userExist) {
+    return res.status(409).json({
+      success: false,
+      message: "User already exits",
+    });
+  }
 
-        if(userExist){
-        return res.status(409).json({
-        success:false,
-        messege:"User already exits"
-       })
-     }
- 
-     // saving data in database 
-    const user =  await User.create({
-        studentemail:studentemail,
-        password:Password,
-        role:role,
-        kuid:kuid
-    })
+  // saving data in database
+  const user = await User.create({
+    studentemail: studentemail,
+    password: Password,
+    role: role,
+    kuid: kuid,
+  });
 
-    const userCreated =  await User.findById(user._id).select("-password -refreshtoken")
-    if(!userCreated){
-        res.status(401).json({
-            success:false,
-            message:"failed to register user"
-        })
-         
-    }
-     
+  const userCreated = await User.findById(user._id).select(
+    "-password -refreshtoken"
+  );
+  if (!userCreated) {
+    res.status(401).json({
+      success: false,
+      message: "failed to register user",
+    });
+  }
 
-     return res.status(201)
-     .json({
-        success:true,
-        messege:"User created",
-        user : NewUser
-      })
+  return res.status(201).json({
+    success: true,
+    messege: "User created",
+    user: userCreated,
+  });
 });
 
-// login User
-const loginUser= asyncHandler(
-    async (req,res) =>{
-        // check ussername and login info
-        const {studentemail,Password,role} = req.body
-        // check code working 
-        // console.log(studentemail)
-        // console.log(Password)
+const generateRefreshTokenAndAccesToken = async (userid) => {
+  try {
+    const user = await User.findById(userid);
+    const refreshToken = user.generateRefreshToken();
+    const accessToken = user.generateAccessToken();
+    user.refreshtoken = refreshToken;
+    await user.save({ validateBeforeSave: false });
+    return { refreshToken, accessToken };
+  } catch (error) {
+    console.log(error, "error in creating refresh token and accestoken ");
+  }
+};
 
-        // check empty or not 
-       if(!studentemail|| !Password || !role ){
-        return res.status(400).json({
-            messege:"empty string"
-        })
-       }
+const loginUser = asyncHandler(async (req, res) => {
+  const { studentemail, Password, role, kuid } = req.body;
 
-       // check user and role 
-       const existUser = await User.findOne({
-        studentemail1:studentemail,
-        role:role
-       })
+  if (!studentemail || !Password || !role || !kuid) {
+    return res.status(400).json({
+      success: false,
+      message: "empty string",
+    });
+  }
 
-       if(!existUser){
-        res.status(400).json({
-            message:"Not user"
-        })
-       }
+  // check user and role
+  const user = await User.findOne({
+    $and: [{ studentemail }, { role }, { kuid }],
+  });
 
-       // validate
-       const Validate = User.IsPasswordCorrect(Password)
+  if (!user) {
+    res.status(400).json({
+      message: "Not activates user",
+    });
+  }
 
-       if(!Validate){
-        res.status(400).json({
-            messege:"Wrong password"
-        })
-       }
+  const Validate = await user.IsPasswordCorrect(Password);
+  if (!Validate) {
+    res.status(400).json({
+      messege: "Wrong password",
+    });
+  }
 
-       return res.status(200).json({
-        success:true,
-        message:"Login sucessfull" ,
-        user:{
-            id: existUser._id,
-            email:existUser.studentemail1,
-            role: existUser.role
-        }
-       })
+  const { refreshToken, accessToken } = await generateRefreshTokenAndAccesToken(
+    user._id
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
 
-    })
+  return res
+    .status(200)
+    .cookie("refreshtokens", refreshToken, options)
+    .cookie("accesstokens", accessToken, options)
+    .json({
+      success: true,
+      message: "Login sucessfull",
+    });
+});
 
 const logout = asyncHandler(
-    (req,res)=>{
-        
-    }
-)
+    async (req, res) => {});
 
-
-
-export  {registerUser,loginUser};
+export { registerUser, loginUser };
