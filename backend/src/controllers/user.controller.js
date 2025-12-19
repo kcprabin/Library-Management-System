@@ -99,7 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const Validate = await user.IsPasswordCorrect(Password);
   if (!Validate) {
-   return res.status(400).json({
+    return res.status(400).json({
       messege: "Wrong password",
     });
   }
@@ -107,9 +107,11 @@ const loginUser = asyncHandler(async (req, res) => {
   const { refreshToken, accessToken } = await generateRefreshTokenAndAccesToken(
     user._id
   );
+
+  console.log(refreshToken)
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: false,
   };
 
   return res
@@ -122,7 +124,33 @@ const loginUser = asyncHandler(async (req, res) => {
     });
 });
 
-const logout = asyncHandler(
-    async (req, res) => {});
+const logout = asyncHandler(async (req, res) => {
+    await User.findByIdAndUpdate(req.user._id,
+        {
+            $set:{
+                refreshtoken:null
+            }
+        },
+        {new:true}
+    )
 
-export { registerUser, loginUser };
+     const options = {
+    httpOnly: true,
+    secure: false,
+  };
+
+    res.status(201)
+    .clearCookie("accesstokens",options)
+    .clearCookie("refreshtokens",options)
+    .json({
+        message:"logout sucessfull",
+        success:true
+    })
+
+
+
+});
+
+export { registerUser,
+         loginUser,
+        logout };

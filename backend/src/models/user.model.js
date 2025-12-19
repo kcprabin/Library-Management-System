@@ -41,7 +41,7 @@ userSchema.pre("save",
 )
   
 userSchema.methods.generateAccessToken = function(){
-    jwt.sign({
+    return jwt.sign({
         _id : this._id,
         studentemail:this.studentemail1,
         role:this.role
@@ -52,7 +52,7 @@ userSchema.methods.generateAccessToken = function(){
 
 
 userSchema.methods.generateRefreshToken = function(){
-    jwt.sign({
+   return jwt.sign({
         _id: this._id
     },process.env.REFRESH_TOKEN,{
         expiresIn:process.env.REFRESH_TOKEN_EXPIRY

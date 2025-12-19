@@ -1,13 +1,14 @@
 import { Router } from "express";
-import {registerUser,loginUser} from "../controllers/user.controller.js";
+import {registerUser,loginUser,logout} from "../controllers/user.controller.js";
+import { loginInCheck } from "../middleware/auth.middleware.js";
 
 
 const router = Router();
 
-// for register
+// for register , login and logout
 router.route("/register").post(registerUser)
-
-//for login 
 router.route("/login").post(loginUser)
+router.route("/logout").post( loginInCheck ,logout)
+
 
 export default router
