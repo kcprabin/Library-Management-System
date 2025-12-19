@@ -2,8 +2,6 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs"
 import dotenv from "dotenv";
 
-
-
 dotenv.config({
     path:"./.env"
 });
@@ -18,9 +16,10 @@ cloudinary.config({
 const cloudinaryUploader = async (localpath)=>{
     if(!localpath) return null;
     try {
-       const response =   await cloudinary.uploader.upload(localpath,{resource_type : "auto"})
-       console.log(`the url in which data is uploaded is ${response.secure_url}`)
-       return response.secure_url
+       const response =  await cloudinary.uploader.upload(localpath,{resource_type : "auto"})
+       fs.unlinkSync(localpath)
+      
+       return response.url
         
     } catch (error) {
         fs.unlinkSync(localpath)

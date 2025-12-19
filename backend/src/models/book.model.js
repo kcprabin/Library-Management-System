@@ -2,31 +2,32 @@ import mongoose, {Schema} from "mongoose";
 
 
 // book scheema 
-
 const bookSchema = new Schema({
-    Title:{
+    title:{
         type:String,
         required:true,
     },
-    Author:{
+    author:{
         type:String,
         required:true,
     },
-    PubishedDate:{
+    publishedDate:{
         type:Number,
         required:true,
     },
-    Publication:{
+    image:{
+        type:String,
+        required:true
+    },
+    publication:{
         type:String,
         required:true,
     },
-    // Image:{
-    //     type:String, //cloudnary
-    //     required:true,
-    // },
-    
-
+    description:{
+        type:String,
+        required:true
+    }
 },{timestamps:true})
 
 
-export const book = mongoose.model("book",bookSchema);
+export const Book = mongoose.model("book",bookSchema);

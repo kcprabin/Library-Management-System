@@ -1,64 +1,59 @@
 import { asyncHandler } from "../utils/asynchandler.js";
-import { book } from "../models/book.model.js";
-// book entry code 
+import { Book } from "../models/book.model.js";
+import { cloudinaryUploader } from "../services/cloudinary.service.js";
 
-// error in thiss code in some json part needs to be corrected 
+const registerBook = asyncHandler(async (req, res) => {
+  const { Title, Author, PublishedDate, Publication, descriptions } = req.body;
 
-
-
-
-const registerBook = asyncHandler(
-  // book entry
-   async (req, res) => {
-    const { Title, Author, PublishedDate, Publication } = req.body;
-    console.log(`Title: ${Title}`);
-
-    // check conditiions
-    if (
-      [Title, Author, PublishedDate, Publication].some(
-        (feilds) => feilds?.trim() == ""
-      )
-    ) return  res.status(400).json({
-      message:"Feild empty"
-    })
-
-    //checking if entry exists
-    const alreadyExists = await book.findOne({
-      Title:Title,
-      Author:Author,
-      PubishedDate:PublishedDate,
-      Publication:Publication,
-    })
-
-    if(alreadyExists){
-      res.status(400).json({
-        message:"already exists"
-      })
-    }
-
-
-    // storing data
-     const booksData = await book.create({
-        Title, Author, PubishedDate:PublishedDate,  Publication
-    })
-
-
-    // response send
-    res.status(200).json(
-        {
-          success:true,
-          message:"books entry created ",
-          books : {
-            Title :booksData.Title,
-            PublishedDate: booksData.PubishedDate,
-            Publication:booksData.Publication
-           }
-
-        }
-    )
-        
-   
+  // Validation
+  if (!Title?.trim() || !Author?.trim() || !PublishedDate?.trim() || !Publication?.trim() || !descriptions?.trim()) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields are required"
+    });
   }
-);
 
-export {registerBook}
+
+  const alreadyExists = await Book.findOne({
+    title: Title.trim(),
+    author: Author.trim(),
+    publication: Publication.trim()
+  });
+
+  if (alreadyExists) {
+    return res.status(400).json({
+      success: false,
+      message: "Book already exists with same data"
+    });
+  }
+
+
+  const bookImage = req.files?.image?.[0]?.path;
+  if (!bookImage) {
+    return res.status(400).json({
+      success: false,
+      message: "Book image is required"
+    });
+  }
+
+  const responseOfCloudinary = await cloudinaryUploader(bookImage);
+
+
+  const book = await Book.create({
+    title: Title.trim(),
+    author: Author.trim(),
+    publishedDate: PublishedDate,
+    publication: Publication.trim(),
+    description: descriptions.trim(),
+    image: responseOfCloudinary
+  });
+
+
+  res.status(201).json({
+    success: true,
+    message: "Book entry created",
+    book
+  });
+});
+
+export { registerBook };

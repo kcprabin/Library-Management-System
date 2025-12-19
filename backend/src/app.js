@@ -18,13 +18,10 @@ app.use(express.urlencoded({
 }))
 
 
-// router  logic
+// router for user
 import Userrouter from './routes/user.routes.js';
-
 app.use('/api/v1/library',Userrouter)
-
-
-
+//for books entry 
 import BookRouter from './routes/book.routes.js'
 app.use('/api/v1/library',BookRouter)
 
