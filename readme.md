@@ -1,5 +1,7 @@
 # 📚 Library Management System (LMS)
 
+By -
+
 A full-stack **Library Management System** built with **React**, **Node.js (Express)**, and **MongoDB**. This system manages books, users, borrowing/returning workflows, and authentication with a clean and scalable architecture.
 
 ---
