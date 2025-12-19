@@ -99,7 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const Validate = await user.IsPasswordCorrect(Password);
   if (!Validate) {
-    res.status(400).json({
+   return res.status(400).json({
       messege: "Wrong password",
     });
   }
