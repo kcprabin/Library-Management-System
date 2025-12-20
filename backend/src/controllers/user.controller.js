@@ -77,9 +77,9 @@ const generateRefreshTokenAndAccesToken = async (userid) => {
 };
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { studentemail, Password, role, kuid } = req.body;
+  const { email, password , role } = req.body;
 
-  if (!studentemail || !Password || !role || !kuid) {
+  if (!email || !password) {
     return res.status(400).json({
       success: false,
       message: "empty string",
@@ -88,16 +88,16 @@ const loginUser = asyncHandler(async (req, res) => {
 
   // check user and role
   const user = await User.findOne({
-    $and: [{ studentemail }, { role }, { kuid }],
+    $and: [{ studentemail:email }, { role }],
   });
 
   if (!user) {
-    res.status(400).json({
+     return res.status(400).json({
       message: "Not activates user",
     });
   }
 
-  const Validate = await user.IsPasswordCorrect(Password);
+  const Validate = await user.IsPasswordCorrect(password);
   if (!Validate) {
     return res.status(400).json({
       messege: "Wrong password",
@@ -121,7 +121,12 @@ const loginUser = asyncHandler(async (req, res) => {
     .json({
       success: true,
       message: "Login sucessfull",
-    });
+      user: {
+        id: user._id,
+        name: user.fullname,
+        email: user.email,
+        role: user.role,}
+})
 });
 
 const logout = asyncHandler(async (req, res) => {
@@ -153,4 +158,4 @@ const logout = asyncHandler(async (req, res) => {
 
 export { registerUser,
          loginUser,
-        logout };
+        logout }
