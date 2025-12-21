@@ -56,7 +56,7 @@ const registerBook = asyncHandler(async (req, res) => {
   });
 });
 
-const editbook = asyncHandler(
+const editBookName = asyncHandler(
    async (req,res)=>{
     
 
