@@ -56,11 +56,5 @@ const registerBook = asyncHandler(async (req, res) => {
   });
 });
 
-const editBookName = asyncHandler(
-   async (req,res)=>{
-    
 
-   }
-)
-
-export { registerBook,editbook };
+export { registerBook };

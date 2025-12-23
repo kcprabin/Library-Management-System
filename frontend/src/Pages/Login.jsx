@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext} from '../context/authcontext';
 
 const Login = () => {
+  axios.defaults.withCredentials = true;
   const [rememberMe, setRememberMe] = useState(false);
   const [loginType, setLoginType] = useState('student'); 
   const [email, setEmail] = useState('');
@@ -16,16 +17,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
 
     try {
       const response = await axios.post("http://localhost:8000/api/v1/library/login", {
         email,
         password,
         role: loginType
-      },{withCredentials: true });
+      },);
       
       if(response.data.success) {
         login(response.data.user);
+        localStorage.setItem()
         alert("Successfully Logged In");
         
         if(loginType === 'admin') {

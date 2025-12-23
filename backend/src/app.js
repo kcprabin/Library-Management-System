@@ -23,7 +23,7 @@ app.use(express.urlencoded({
 import Userrouter from './routes/user.routes.js';
 app.use('/api/v1/library',Userrouter)
 //for books entry 
-import BookRouter from './routes/book.routes.js'
+import BookRouter from './routes/admin.routes.js'
 app.use('/api/v1/library',BookRouter)
 
 

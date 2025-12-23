@@ -1,13 +1,12 @@
 import { Router } from "express";
-import { registerBook ,editbook} from "../controllers/admin.controller..js";
+import { registerBook} from "../controllers/admin.controller..js";
 import { upload } from "../middleware/multer.middleware.js";
 import { loginInCheck } from "../middleware/auth.middleware.js";
-import { adminCheck } from "../middleware/admin.middleware.js";
 
 const router = Router();
 
-router.route("/registerbook").post( 
-  loginInCheck ,
+router.route("/registerbook").post(
+  loginInCheck,
   upload.fields([
     {
       name: "image",
@@ -16,8 +15,6 @@ router.route("/registerbook").post(
   ]),
   registerBook
 );
-router.route("/editbooks").post(
-    loginInCheck,editbook)
-
+// router.route("/editbooks").post(loginInCheck, editbook);
 
 export default router;
