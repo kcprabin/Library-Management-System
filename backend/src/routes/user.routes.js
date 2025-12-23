@@ -10,7 +10,7 @@ const router = Router();
 router.route("/register").post(registerUser)
 router.route("/login").post(loginUser)
 router.route("/logout").post( loginInCheck ,logout)
-router.route("/rememberme").post(autoLogin)
+router.route("/rememberme").get(autoLogin)
 
 
 
