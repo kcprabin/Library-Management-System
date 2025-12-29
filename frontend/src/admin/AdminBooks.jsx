@@ -19,7 +19,7 @@ function AdminBooks() {
   const fetchBooks = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8000/api/v1/library/getbooks");
+      const res = await fetch("http://localhost:8000/api/v1/library/getbooks", { credentials: 'include' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data && data.Books) setBooks(data.Books);
@@ -42,6 +42,7 @@ function AdminBooks() {
     try {
       const res = await fetch("http://localhost:8000/api/v1/library/registerbook", {
         method: "POST",
+        credentials: 'include',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
@@ -69,7 +70,7 @@ function AdminBooks() {
         <h1 className="text-2xl font-bold">Books Management</h1>
         <div>
           <button
-            onClick={() => { const nav = navigate; nav('/admin-dashboard/new-book'); }}
+            onClick={() => { const nav = navigate; nav('/new-book'); }}
             className="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
             title="Add book"
           >

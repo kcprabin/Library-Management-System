@@ -19,12 +19,12 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />}></Route>
           <Route path="/login" element={<Login />}/>
            <Route path="/register" element={<Register/>}/>
+           <Route path="new-book" element={<NewBook />} />
 
           <Route path="/admin-dashboard" element={<AdminDashboard />}>
             <Route index element={<div className="text-2xl font-bold">Welcome to Admin Dashboard!</div>} />
               <Route path="members" element={<Members />} />
             <Route path="books" element={<Books />} />
-            <Route path="new-book" element={<NewBook />} />
             <Route path="issued" element={<Issued />} />
           
             <Route path="returned" element={<ReturnedBooks />} />
