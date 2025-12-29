@@ -6,4 +6,4 @@ import { get } from "mongoose";
 
 const router = Router()
 
-router.route("/student-dashboard/books").get(getBooks)
+router.route("/student-dashboard/books").get(loginInCheck,getBooks)

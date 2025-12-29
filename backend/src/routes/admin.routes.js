@@ -15,9 +15,9 @@ router.route("/registerbook").post(
   ]),
   registerBook
 );
-router.route("/members").get(getMembers)
+router.route("/members").get(loginInCheck,getMembers)
 // router.route("/editbooks").post(loginInCheck, editbook);
-router.route('/getbooks').get(getBooks)
-router.route('/issue').get(issueForAdmin)
+router.route('/getbooks').get(loginInCheck,getBooks)
+router.route('/issue').get(loginInCheck,issueForAdmin)
 
 export default router;

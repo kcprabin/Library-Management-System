@@ -15,4 +15,10 @@ const getBooks = asyncHandler(async (req, res) => {
 });
 
 
+const bookBorrow = asyncHandler(
+  async(req,res)=>{
+    const {bookid , student} = req.body
+  }
+)
+
 export {getBooks}
