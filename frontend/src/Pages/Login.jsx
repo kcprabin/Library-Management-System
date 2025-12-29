@@ -26,7 +26,7 @@ const Login = () => {
       
       if(response.data.success) {
         login(response.data.user);
-        alert("Successfully Logged In");
+        alert("Successfully Logged In"); //yo hatau nu parne xa 
         
         if(loginType === 'admin') {
           navigate('/admin-dashboard');

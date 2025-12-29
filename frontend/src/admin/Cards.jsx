@@ -2,7 +2,7 @@ import React from 'react'
 import { FaBook, FaUsers, FaHandshake, FaUndoAlt, FaExclamationTriangle } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 
-const Main = () => {
+const Cards = () => {
   return(
    <div>
     <div className="pl-69">
@@ -99,4 +99,4 @@ const Main = () => {
   )
 }
 
-export default Main
+export default Cards
