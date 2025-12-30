@@ -7,9 +7,6 @@ const StuBooks = () => {
       <div className="bg-white rounded-xl shadow-sm p-6 max-w-4xl">
         <SearchBar />
       </div>
-
-      
-
     </div>
   )
 }
