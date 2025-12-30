@@ -1,6 +1,5 @@
 import mongoose, {Schema} from "mongoose";
 
-
 // book scheema 
 const bookSchema = new Schema({
     title:{

@@ -6,6 +6,7 @@ import Authcontext from './context/authcontext'
 
 import Members from "./admin/Members";
 import Books from "./admin/AdminBooks";
+import NewBook from "./admin/NewBook";
 import Issued from "./admin/Issused";       
 import ReturnedBooks from "./admin/AdminReturned";
 import NotReturnedBooks from "./admin/AdminNotReturn";
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />}></Route>
           <Route path="/login" element={<Login />}/>
            <Route path="/register" element={<Register/>}/>
+           <Route path="new-book" element={<NewBook />} />
 
           <Route path="/admin-dashboard" element={<AdminDashboard />}>
             <Route index element={<div className="text-2xl font-bold">Welcome to Admin Dashboard!</div>} />

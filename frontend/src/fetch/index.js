@@ -1,5 +1,5 @@
 export const getUser = async () => {
-    const response = await fetch("http://localhost:8000/api/v1/users",{//prabin
+    const response = await fetch("http://localhost:8000/api/v1/users",{
     method: "GET",});
 return await response.json();
 }

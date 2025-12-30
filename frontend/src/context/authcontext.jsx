@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react'
 
 
+
 export const AuthContext = createContext();
 
  function Authcontext  ({children}) {
@@ -12,19 +13,18 @@ export const AuthContext = createContext();
         localStorage.setItem('user', JSON.stringify(userData));
     }
     
-    const logout = () => {
-    // Clear user data
-    setUser(null);
-    
-    // Clear localStorage/sessionStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    
-    
-  };
+  //   const logout = async () => {
+  //   await axios.post(
+  //     "http://localhost:8000/api/v1/library/logout",
+  //     {},
+  //     { withCredentials: true } // important to send cookies
+  //   );
+  //   setUser(null);
+  //   navigate("/login");
+  // };
     
     return (
-        <AuthContext.Provider value={{user, login, logout}}>
+        <AuthContext.Provider value={{user, login}}>
             {children}
         </AuthContext.Provider>
     )

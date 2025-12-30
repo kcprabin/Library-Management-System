@@ -9,14 +9,20 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
 
-  const {logout} = useContext(AuthContext);
+ 
  const navigate = useNavigate();
 
   const [data,setData] = useState([]);
   useEffect(() => {
     getUser().then(posts => setData(posts))
 
-  } ,[]) 
+  } ,[navigate]) 
+  const out=async()=>{
+     await axios.post(
+      "http://localhost:8000/api/v1/library/logout",
+      {},
+      { withCredentials: true }
+  )}
   
   return (
     <div className='flex items-center justify-between h-12 bg-teal-600 px-6 text-white shadow-md'>
@@ -25,7 +31,7 @@ const Navbar = () => {
 
       <button 
          onClick={() => {
-    logout();
+    out();
     navigate('/login'); }}
         className='bg-teal-700 hover:bg-teal-800 px-4 py-2 rounded-md transition-colors duration-200'
               >
