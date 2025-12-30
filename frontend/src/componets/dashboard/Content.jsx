@@ -7,7 +7,7 @@ import Issused from '../../admin/Issused';
 import AdminBooks from '../../admin/AdminBooks';
 import AdminReturned from '../../admin/AdminReturned';
 
-import StuCard from '../../student/StuCards'
+import StuCards from '../../student/StuCards'
 import StuBooks from '../../student/StuBooks'
 import StuNotReturn from '../../student/StuNotReturn'
 import StuReturn from '../../student/StuReturn'
@@ -30,7 +30,7 @@ const Content = () => {
 
   // Render components based on active route
   if (isDashboardActive ) {
-    return  isStudent ? <StuCard/> : <Cards />;
+    return  isStudent ? <StuCards/> : <Cards />;
   }  else if (isMembersActive && isAdmin) {
     return <Members />;
   }

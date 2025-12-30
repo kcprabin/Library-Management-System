@@ -1,44 +1,54 @@
-
-import React ,{useEffect,useState,useContext}from 'react'
-import axios from 'axios'
-import { getUser } from '../../fetch'
-import { AuthContext } from '../../context/authcontext';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaBars } from 'react-icons/fa';
+import axios from 'axios';
 
+const Navbar = ({ toggleSidebar }) => {
+  const navigate = useNavigate();
+  const [userName, setUserName] = useState('User');
 
-
-const Navbar = () => {
-
- 
- const navigate = useNavigate();
-
-  const [data,setData] = useState([]);
   useEffect(() => {
-    getUser().then(posts => setData(posts))
+    // Fetch user data if you have an endpoint
+    // For now using placeholder
+    setUserName('Admin'); // or 'Student' based on role
+  }, []);
 
-  } ,[navigate]) 
-  const out=async()=>{
-     await axios.post(
-      "http://localhost:8000/api/v1/library/logout",
-      {},
-      { withCredentials: true }
-  )}
-  
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:8000/api/v1/library/logout",
+        {},
+        { withCredentials: true }
+      );
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
-    <div className='flex items-center justify-between h-12 bg-teal-600 px-6 text-white shadow-md'>
-      <p className='pl-69 text-lg font-semibold'>Welcome, {data.length > 0 ? data[0]?.name : "Student"}
-</p>
+    <div className='flex items-center justify-between h-20 px-4 lg:px-6 text-oklch(92.2% 0 0) shadow-none relative z-30 bg-transparent border-b border-white border-opacity-10'>
+      <div className="flex items-center gap-4">
+        <button 
+          onClick={toggleSidebar}
+          className="lg:hidden text-white hover:text-gray-300 transition-colors hover:bg-white hover:bg-opacity-10 p-2 rounded-lg"
+        >
+          <FaBars className="w-6 h-6" />
+        </button>
+        <div>
+          <p className='text-sm text-gray-300'>Welcome back</p>
+          <p className='text-lg font-bold drop-shadow-lg text-white'>{userName}</p>
+        </div>
+      </div>
 
       <button 
-         onClick={() => {
-    out();
-    navigate('/login'); }}
-        className='bg-teal-700 hover:bg-teal-800 px-4 py-2 rounded-md transition-colors duration-200'
-              >
+        onClick={handleLogout}
+        className='bg-red-600 hover:bg-red-700 px-6 py-2.5 rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105'
+      >
         Logout
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

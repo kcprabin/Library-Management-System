@@ -54,8 +54,10 @@ const Login = () => {
       if (response.data.success) {
         login(response.data.user);
 
+
         if (loginType === 'admin') navigate('/admin-dashboard');
         else navigate('/student-dashboard');
+
       }
     } catch (err) {
       console.error(err);

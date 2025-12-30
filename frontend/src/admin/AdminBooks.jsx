@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 
 function AdminBooks() {
   const navigate = useNavigate();
@@ -66,6 +68,8 @@ function AdminBooks() {
 
   return (
     <div className="p-6">
+
+
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Books Management</h1>
         <div>
@@ -117,8 +121,10 @@ function AdminBooks() {
             {books.length === 0 && <p className="mt-2 col-span-full">No books found.</p>}
           </div>
         )}
+
       </div>
     </div>
+  
   );
 }
 
