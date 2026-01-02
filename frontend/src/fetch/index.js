@@ -16,6 +16,7 @@ const API_BASE_URL = 'http://localhost:8000/api/v1/library';
 //http://localhost:8000/api/v1/library/seebook
 
 
+
 // aru ta sab mailai sakisake user this api to fetch result and also put data in database
 
 
@@ -26,8 +27,8 @@ export const getMembers = async() => {
             method: "GET",
             credentials: 'include'
         });
-        if (!reponse.ok) throw new Error ("Failed to Fetch members");
-        return await response.json;
+        if (!response.ok) throw new Error ("Failed to Fetch members");
+        return await response.json();
     }
     catch(error)
     {
@@ -67,8 +68,31 @@ export const getIssuedBooks = async () => {
 
 
 export const getUser = async () => {
-    const response = await fetch('API_BASE_URL}/User',{
+    const response = await fetch('${API_BASE_URL}/userName',{
     method: "GET",});
 return await response.json();
 }
+
+export const borrowBook = async (bookId) => {
+  try {
+    const response = await fetch('http://localhost:8000/api/v1/library/borrowbook', {
+      method: "POST",
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ bookid: bookId })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to borrow book');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error borrowing book:', error);
+    throw error;
+  }
+};
 {/*write a function to fetch any thing in the frontend here and then call the function in the respective file */}

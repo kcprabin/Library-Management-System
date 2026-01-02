@@ -24,12 +24,13 @@ function NewBook() {
     try {
       setLoading(true);
       const fd = new FormData();
-      fd.append("Title", form.title);
-      fd.append("Author", form.author);
-      fd.append("PublishedDate", form.publishedDate);
-      fd.append("Publication", form.publication);
-      fd.append("descriptions", form.description);
+      fd.append("title", form.title);
+      fd.append("author", form.author);
+      fd.append("publishedDate", Number(form.publishedDate));
+      fd.append("publication", form.publication);
+      fd.append("description", form.description);
       if (imageFile) fd.append("image", imageFile);
+
 
       const res = await fetch("http://localhost:8000/api/v1/library/registerbook", {
         method: "POST",

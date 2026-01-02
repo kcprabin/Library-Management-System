@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaTachometerAlt, FaBook, FaThumbsUp, FaThumbsDown, FaTimes } from 'react-icons/fa';
+import { FaTachometerAlt, FaBook, FaThumbsUp, FaTimes, FaHandshake } from 'react-icons/fa';
 
 const StudentSidebar = ({ isOpen, setIsOpen }) => {
   return (
@@ -19,7 +19,16 @@ const StudentSidebar = ({ isOpen, setIsOpen }) => {
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <div className="p-6 border-b border-teal-500 border-opacity-30 flex items-center justify-between bg-gradient-to-r from-teal-600/20 to-teal-700/20 backdrop-blur">
-          <h3 className="text-2xl font-bold drop-shadow-lg">📚 Library MS</h3>
+          <div className="flex items-center gap-1">
+              <img
+                   src="/images/logo.png"
+                   className="h-15 w-15 object-contain object-[6] "
+                   alt="Yr Library Logo"
+                   />
+             <h3 className="text-xl font-bold tracking-wide">
+                 Yr Library
+              </h3>
+        </div>
           <button 
             onClick={() => setIsOpen(false)}
             className="lg:hidden text-white hover:text-teal-300 transition-colors hover:bg-teal-500 hover:bg-opacity-20 p-2 rounded-lg"
@@ -48,6 +57,15 @@ const StudentSidebar = ({ isOpen, setIsOpen }) => {
             <span>Books</span>
           </NavLink>
           
+           <NavLink 
+            to="/student-dashboard/issue" 
+            onClick={() => setIsOpen(false)}
+            className={({isActive}) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${isActive ? "bg-gradient-to-r from-red-500 to-red-600 shadow-lg shadow-red-500/50 text-white font-semibold" : "hover:bg-gray-700 hover:bg-opacity-50 text-gray-300 hover:text-white"}`}
+          >
+            <FaHandshake className="text-lg" />
+            <span>Issue</span>
+          </NavLink>
+
           <NavLink 
             to="/student-dashboard/returned" 
             onClick={() => setIsOpen(false)}
@@ -57,14 +75,7 @@ const StudentSidebar = ({ isOpen, setIsOpen }) => {
             <span>Returned</span>
           </NavLink>
           
-          <NavLink 
-            to="/student-dashboard/not-returned" 
-            onClick={() => setIsOpen(false)}
-            className={({isActive}) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${isActive ? "bg-gradient-to-r from-red-500 to-red-600 shadow-lg shadow-red-500/50 text-white font-semibold" : "hover:bg-gray-700 hover:bg-opacity-50 text-gray-300 hover:text-white"}`}
-          >
-            <FaThumbsDown className="text-lg" />
-            <span>Not Returned</span>
-          </NavLink>
+         
         </nav>
       </div>
     </>

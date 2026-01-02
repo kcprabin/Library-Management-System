@@ -1,70 +1,85 @@
-import React from 'react'
-import { FaBook, FaUsers, FaHandshake, FaUndoAlt, FaExclamationTriangle } from 'react-icons/fa'
-import { NavLink } from 'react-router-dom'
+import React from 'react';
+import { FaBook, FaHandshake, FaUndoAlt, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
+import { NavLink } from 'react-router-dom';
+import { useDashboardStats } from '../hooks/useDashboardStats';
 
 const StuCards = () => {
-  return(
-   <div>
-    <div className="pl-4 md:pl-0">
-      <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">My Dashboard</h1>
-      <p className="text-gray-200 mb-8 drop-shadow-md">Track your borrowed books and reading progress.</p>
+  const { stats, loading, error } = useDashboardStats();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <FaSpinner className="w-12 h-12 text-teal-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 text-lg">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+        <FaExclamationTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+        <p className="text-red-600">{error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold text-white mb-8">Student Dashboard</h1>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
-
-
-        {/* Books Card */}
-        <NavLink 
-        to={"books"}>
-        <div className="bg-gradient-to-br from-teal-600 to-teal-800 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all duration-300 backdrop-blur-sm bg-opacity-90 border border-teal-400 border-opacity-30" >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-teal-200 text-sm font-semibold mb-2 uppercase tracking-wide">Total Books</p>
-              <p className="text-5xl font-bold drop-shadow-lg">245</p>
-            </div>
-            <div className="p-4 rounded-full bg-teal-500 bg-opacity-30 backdrop-blur">
-              <FaBook className="w-12 h-12 text-teal-100"/>
+        {/* Available Books */}
+        <NavLink to="books">
+          <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 cursor-pointer">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-teal-100 text-sm font-medium mb-2">Available Books</p>
+                <p className="text-5xl font-bold">{stats.totalBooks}</p>
+              </div>
+              <div className="p-4 bg-teal-600 bg-opacity-30 rounded-full">
+                <FaBook className="w-12 h-12"/>
+              </div>
             </div>
           </div>
-        </div>
         </NavLink>
 
-
-        {/* Returned Books Card */}
-        <NavLink to={"returned"}>
-        <div className="bg-gradient-to-br from-green-600 to-green-800 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all duration-300 backdrop-blur-sm bg-opacity-90 border border-green-400 border-opacity-30">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-200 text-sm font-semibold mb-2 uppercase tracking-wide">Books Returned</p>
-              <p className="text-5xl font-bold drop-shadow-lg">189</p>
-            
-            </div>
-             <div className="p-4 rounded-full bg-green-500 bg-opacity-30 backdrop-blur">
-              <FaUndoAlt className="w-12 h-12 text-green-100"/>
+        {/* Book Issues (My Borrowed Books) */}
+        <NavLink to="issue">
+          <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 cursor-pointer">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-100 text-sm font-medium mb-2">My Borrowed Books</p>
+                <p className="text-5xl font-bold">{stats.booksIssued}</p>
+              </div>
+              <div className="p-4 bg-yellow-600 bg-opacity-30 rounded-full">
+                <FaHandshake className="w-12 h-12"/>
+              </div>
             </div>
           </div>
-        </div>
         </NavLink>
 
-        {/* Overdue Books Card */}
-        <NavLink to={"not-returned"}>
-        <div className="bg-gradient-to-br from-red-600 to-red-800 rounded-xl shadow-2xl p-6 text-white transform hover:scale-105 transition-all duration-300 backdrop-blur-sm bg-opacity-90 border border-red-400 border-opacity-30">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-200 text-sm font-semibold mb-2 uppercase tracking-wide">Books Not Returned</p>
-              <p className="text-5xl font-bold drop-shadow-lg">7</p>
-              
-            </div>
-           <div className="p-4 rounded-full bg-red-500 bg-opacity-30 backdrop-blur">
-              <FaExclamationTriangle className="w-12 h-12 text-red-100"/>
+        {/* Returned Books */}
+        <NavLink to="returned">
+          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 cursor-pointer">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium mb-2">Returned Books</p>
+                <p className="text-5xl font-bold">{stats.booksReturned}</p>
+              </div>
+              <div className="p-4 bg-green-600 bg-opacity-30 rounded-full">
+                <FaUndoAlt className="w-12 h-12"/>
+              </div>
             </div>
           </div>
-        </div>
         </NavLink>
 
-      </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default StuCards
+export default StuCards;

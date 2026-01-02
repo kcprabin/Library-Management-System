@@ -74,7 +74,7 @@ const Adminsidebar = ({ isOpen, setIsOpen }) => {
             className={({isActive}) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ${isActive ? "bg-gradient-to-r from-yellow-500 to-yellow-600 shadow-lg shadow-yellow-500/50 text-white font-semibold" : "hover:bg-gray-700 hover:bg-opacity-50 text-gray-300 hover:text-white"}`}
           >
             <FaCheck className="text-lg" />
-            <span>Issued</span>
+            <span>Issues</span>
           </NavLink>
           
           <NavLink 

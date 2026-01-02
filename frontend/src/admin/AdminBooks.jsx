@@ -9,6 +9,7 @@ function AdminBooks() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [form, setForm] = useState({
     title: "",
     author: "",
@@ -71,7 +72,8 @@ function AdminBooks() {
 
 
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Books Management</h1>
+        <h1 className="text-2xl font-bold text-white">Books Management</h1>
+        
         <div>
           <button
             onClick={() => { const nav = navigate; nav('/new-book'); }}
@@ -83,6 +85,15 @@ function AdminBooks() {
           </button>
         </div>
       </div>
+      <div className="mb-4 text-white">
+          <input
+            type="text"
+            placeholder="Search books by title or author..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2         focus:ring-blue-500"
+          />
+        </div>
 
       {showForm && (
         <div className="bg-white rounded-lg shadow p-4 mb-4">

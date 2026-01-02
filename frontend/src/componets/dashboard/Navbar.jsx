@@ -5,13 +5,14 @@ import axios from 'axios';
 
 const Navbar = ({ toggleSidebar }) => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('User');
+    const [role, setRole] = useState('');
+  const [userName, setUser] = useState('User');
 
   useEffect(() => {
-    // Fetch user data if you have an endpoint
-    // For now using placeholder
-    setUserName('Admin'); // or 'Student' based on role
-  }, []);
+   
+    setUser(); 
+  }, [navigate]);
+
 
   const handleLogout = async () => {
     try {
@@ -36,9 +37,12 @@ const Navbar = ({ toggleSidebar }) => {
           <FaBars className="w-6 h-6" />
         </button>
         <div>
-          <p className='text-sm text-gray-300'>Welcome back</p>
-          <p className='text-lg font-bold drop-shadow-lg text-white'>{userName}</p>
-        </div>
+  <p className='text-sm text-white'>Welcome back</p>
+
+  <p className='text-lg font-bold text-white'>
+    {role === 'admin' ? 'Admin' : userName}
+  </p>
+</div>
       </div>
 
       <button 

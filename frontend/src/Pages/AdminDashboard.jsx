@@ -9,7 +9,7 @@ function AdminDashboard() {
 
   return (
     <div className="relative min-h-screen ">
-      {/* Background Component - Fixed */}
+     
       <Background />
       
       {/* Content Overlay */}
