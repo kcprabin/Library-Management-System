@@ -48,7 +48,7 @@ const StuCards = () => {
         </NavLink>
 
         {/* Book Issues (My Borrowed Books) */}
-        <NavLink to="issue">
+        <NavLink to="Issue">
           <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 cursor-pointer">
             <div className="flex items-center justify-between">
               <div>

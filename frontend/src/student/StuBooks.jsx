@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaBook, FaSpinner } from "react-icons/fa";
-import { getBooks, borrowBook } from "../fetch";
-import { useToast } from "../context/ToastContext";
+import { getBooks, borrowBook } from "../fetch/index";
+import toast from "react-hot-toast";
 import ConfirmModal from "../componets/common/ConfirmModal";
 
 function StuBooks() {
@@ -12,7 +12,7 @@ function StuBooks() {
   const [borrowing, setBorrowing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   
-  const { showToast } = useToast();
+
 
   // Fetch books
   const fetchBooks = async () => {
@@ -39,10 +39,10 @@ function StuBooks() {
     try {
       setBorrowing(true);
       await borrowBook(selectedBook._id);
-      showToast(`Successfully borrowed "${selectedBook.title}"!`, 'success');
+      toast.success(`Successfully borrowed "${selectedBook.title}"!`, 'success');
       setSelectedBook(null);
     } catch (err) {
-      showToast(err.message || 'Failed to borrow book', 'error');
+      toast.error(err.message || 'Failed to borrow book', 'error');
     } finally {
       setBorrowing(false);
     }

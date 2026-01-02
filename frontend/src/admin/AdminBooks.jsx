@@ -66,6 +66,10 @@ function AdminBooks() {
       setError(err.message || "Failed to create book");
     }
   };
+  const filteredBooks = books.filter(book => 
+  book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  book.author.toLowerCase().includes(searchTerm.toLowerCase())
+);
 
   return (
     <div className="p-6">
@@ -118,7 +122,7 @@ function AdminBooks() {
 
         {!loading && !error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {books.map((b) => (
+            {filteredBooks.map((b) => (
               <div key={b._id} className="border rounded-lg shadow-sm p-4 bg-white">
                 {b.image && (
                   <img src={b.image} alt={b.title} className="w-full h-40 object-cover rounded mb-3" />
@@ -129,7 +133,7 @@ function AdminBooks() {
                 <p className="mt-3 text-xs text-gray-400">{b.publishedDate || (b.createdAt ? new Date(b.createdAt).toLocaleDateString() : '')}</p>
               </div>
             ))}
-            {books.length === 0 && <p className="mt-2 col-span-full">No books found.</p>}
+          {filteredBooks.length === 0 && (<p className="mt-2 col-span-full">{searchTerm ? `No books found matching "${searchTerm}"` : 'No books found.'}</p>)}
           </div>
         )}
 
