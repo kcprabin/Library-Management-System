@@ -6,10 +6,10 @@ import { Issue} from "../models/issue.model.js";
 
 
 const registerBook = asyncHandler(async (req, res) => {
-  const { Title, Author, PublishedDate, Publication, descriptions } = req.body;
+  const { title, author, publishedDate, publication, description } = req.body;
 
   // Validation
-  if (!Title?.trim() || !Author?.trim() || !PublishedDate?.trim() || !Publication?.trim() || !descriptions?.trim()) {
+  if (!title?.trim() || !author?.trim() || !publishedDate?.trim() || !publication?.trim() || !description?.trim()) {
     return res.status(400).json({
       success: false,
       message: "All fields are required"
@@ -18,9 +18,9 @@ const registerBook = asyncHandler(async (req, res) => {
 
 
   const alreadyExists = await Book.findOne({
-    title: Title.trim(),
-    author: Author.trim(),
-    publication: Publication.trim()
+    title: title.trim(),
+    author: author.trim(),
+    publication: publication.trim()
   });
 
   if (alreadyExists) {
@@ -43,11 +43,11 @@ const registerBook = asyncHandler(async (req, res) => {
 
 
   const book = await Book.create({
-    title: Title.trim(),
-    author: Author.trim(),
-    publishedDate: PublishedDate,
-    publication: Publication.trim(),
-    description: descriptions.trim(),
+    title: title.trim(),
+    author: author.trim(),
+    publishedDate: Number(publishedDate),
+    publication: publication.trim(),
+    description: description.trim(),
     image: responseOfCloudinary
   });
 
