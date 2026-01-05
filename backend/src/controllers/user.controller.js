@@ -156,37 +156,46 @@ const logout = asyncHandler(async (req, res) => {
 
 });
 
-const autoLogin = asyncHandler ( async(req,res)=>{
+const autoLogin = asyncHandler(async (req, res) => {
   try {
-    const token = req.cookies.accesstokens
-    if(!token){
-      return res.status(400).json({
-        success:false,
-        message:"no tokens"
-      })
+    const token = req.cookies.accesstokens;
+    if (!token) {
+      return res.status(401).json({ // Use 401 for unauthorized
+        success: false,
+        message: "No token found"
+      });
     }
-    const decodedToken = jwt.verify(token , process.env.ACCESS_TOKEN)
 
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN);
 
-     const userrole= await User.findById(decodedToken._id)
-     const role = userrole.role
+    // Fetch the full user object to get the name and role
+    const user = await User.findById(decodedToken._id).select("-password -refreshtoken");
 
-    
-  
-      return res.status(200).json({
-        success:true,
-        message:"valid bearer tokens",
-        role:role
-      })
-    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Valid token",
+      // Send the data the Navbar  needs
+      user: {
+        name: user.userName,
+        role: user.role,
+        email: user.studentemail
+      }
+    });
+
   } catch (error) {
-    res.status(400).json({
-      success:false,
-      message:"unable to get cookies login again"
-    })
-    
+    return res.status(401).json({
+      success: false,
+      message: "Session expired, please login again"
+    });
   }
-})
+});
 
 export { registerUser,
          loginUser,

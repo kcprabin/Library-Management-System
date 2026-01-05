@@ -63,9 +63,13 @@ const bookBorrow = asyncHandler(async (req, res) => {
 
 const bookTaken  = asyncHandler(
   async(req,res)=>{
-    const booktaken = await BooksIssue.find()
+    const booktaken = await BooksIssue.find({ 
+    user: req.user._id,
+    status: "ISSUED" 
+  }).populate("book");
 
     return res.status(201).json({
+      success:true,
       books:booktaken
     })
   }
