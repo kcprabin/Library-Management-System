@@ -51,7 +51,9 @@ const Navbar = ({ toggleSidebar }) => {
       >
         Logout
       </button>
+    
     </div>
+  
   );
 };
 

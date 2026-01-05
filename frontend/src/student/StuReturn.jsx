@@ -8,7 +8,7 @@ const StuReturn = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('recent'); // 'recent', 'title', 'author'
+  const [sortBy, setSortBy] = useState('recent'); 
 
   useEffect(() => {
     fetchReturnedBooks();
