@@ -4,9 +4,9 @@ import jwt from "jsonwebtoken";
 
 const registerUser = asyncHandler(async (req, res) => {
   //Handle user inputs from frontend as objects
-  const { studentemail, password, role  } = req.body;
+  const { studentemail, password, userName ,role  } = req.body;
 
-  if(!studentemail||!password || !role ){
+  if(!studentemail||!password || !userName || !role ){
     return res.status(300).json({
       message:"empty feild",
       success:false
@@ -25,10 +25,23 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   }
 
+  //checking if UsernameTaken or not
+  const TakenName = await User.findOne(
+    { userName: userName }
+  );
+
+  if (TakenName) {
+    return res.status(300).json({
+      success: false,
+      message: "UserName already Taken",
+    });
+  }
+
   // saving data in database
   const user = await User.create({
     studentemail: studentemail,
     password: password,
+    userName: userName,
     role: role,
   });
 
@@ -110,7 +123,7 @@ const loginUser = asyncHandler(async (req, res) => {
       message: "Login sucessfull",
       user: {
         id: user._id,
-        name: user.fullname,
+        name: user.userName,
         email: user.email,
         role: user.role,}
 })

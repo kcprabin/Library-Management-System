@@ -9,15 +9,16 @@ function Members() {
     const fetchMembers = async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost:8000/api/v1/library/members", {
-          method: "GET",
-          credentials: "include", // send httpOnly cookies
-        });
+        const res = await fetch(
+          "http://localhost:8000/api/v1/library/members",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
 
         if (res.status === 401) {
           setError("Unauthorized (401). Please login.");
-          // optionally redirect to login
-          // window.location.href = '/login';
           return;
         }
         if (res.status === 403) {
@@ -27,8 +28,8 @@ function Members() {
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        if (data && data.users) setMembers(data.users);
-        else if (data && data.user) setMembers(data.user);
+        if (data?.users) setMembers(data.users);
+        else if (data?.user) setMembers(data.user);
         else setError("Unexpected response format");
       } catch (err) {
         setError(err.message || "Failed to fetch members");
@@ -39,38 +40,115 @@ function Members() {
     fetchMembers();
   }, []);
 
-  return (
-    <div className="p-69">
-      <h1 className="text-2xl font-bold mb-4">Members Management</h1>
+  
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this member?"
+    );
+    if (!confirmDelete) return;
 
-      <div className="bg-white rounded-lg shadow p-4">
-        {loading && <p>Loading members...</p>}
-        {error && <p className="text-red-600">Error: {error}</p>}
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/v1/library/members/${id}`,//delete member ko APi
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to delete member");
+
+      // remove from UI
+      setMembers((prev) => prev.filter((m) => m._id !== id));
+    } catch (err) {
+      alert(err.message || "Delete failed");
+    }
+  };
+
+  return (
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="mb-6">
+        <h1 className="text-3xl font-semibold text-white">
+          Members Management
+        </h1>
+        <p className="text-sm text-white">
+          View and manage registered library members
+        </p>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-md border border-gray-100">
+        {loading && (
+          <div className="p-8 text-center text-gray-500">
+            Loading members...
+          </div>
+        )}
+
+        {error && (
+          <div className="p-6 text-center text-red-600 font-medium">
+            {error}
+          </div>
+        )}
 
         {!loading && !error && (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {members.map((m) => (
-                  <tr key={m._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">{m.studentemail || "-"}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{m.role || "-"}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{new Date(m.createdAt).toLocaleString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{new Date(m.updatedAt).toLocaleString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {members.length === 0 && <p className="mt-2">No members found.</p>}
-          </div>
+          <>
+            {members.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                No members found.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead className="bg-gray-50 border-b">
+                    <tr>
+                      <th className="px-6 py-4 text-left">Email</th>
+                      <th className="px-6 py-4 text-left">Role</th>
+                      <th className="px-6 py-4 text-left">Created</th>
+                      <th className="px-6 py-4 text-left">Updated</th>
+                      <th className="px-6 py-4 text-center">Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y">
+                    {members.map((m) => (
+                      <tr
+                        key={m._id}
+                        className="hover:bg-gray-50 transition"
+                      >
+                        <td className="px-6 py-4">
+                          {m.studentemail || "-"}
+                        </td>
+
+                        <td className="px-6 py-4">
+                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                            {m.role || "N/A"}
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 text-gray-600">
+                          {new Date(m.createdAt).toLocaleString()}
+                        </td>
+
+                        <td className="px-6 py-4 text-gray-600">
+                          {new Date(m.updatedAt).toLocaleString()}
+                        </td>
+
+                        <td className="px-6 py-4 text-center">
+                          <button
+                            onClick={() => handleDelete(m._id)}
+                            className="px-4 py-1.5 text-xs font-medium rounded-lg 
+                                       bg-red-100 text-red-600 hover:bg-red-200
+                                       transition"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

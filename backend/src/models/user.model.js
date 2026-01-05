@@ -15,6 +15,11 @@ const userSchema = new Schema(
       required: true,
       trim: true,
     },
+    userName:{
+      type:String,
+      required:true,
+      trim:true,
+    },
    
     role: {
       type: String,
@@ -37,7 +42,7 @@ userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
-      studentemail: this.studentemail1,
+      studentemail: this.studentemail,
       role: this.role,
     },
     process.env.ACCESS_TOKEN,

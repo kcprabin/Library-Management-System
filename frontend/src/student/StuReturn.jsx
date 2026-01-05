@@ -1,6 +1,6 @@
 import React from 'react'
 
-const StuReturned = () => {
+const StuReturn = () => {
   return (
     <div>
       Returned
@@ -9,5 +9,5 @@ const StuReturned = () => {
   )
 }
 
-export default StuReturned
+export default StuReturn
 
