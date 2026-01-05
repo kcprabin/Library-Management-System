@@ -37,9 +37,9 @@ const Navbar = ({ toggleSidebar }) => {
           <FaBars className="w-6 h-6" />
         </button>
         <div>
-  <p className='text-sm text-white'>Welcome back</p>
+  <p className='text-sm text-gray-900'>Welcome back</p>
 
-  <p className='text-lg font-bold text-white'>
+  <p className='text-lg font-bold text-gray-600'>
     {role === 'admin' ? 'Admin' : userName}
   </p>
 </div>

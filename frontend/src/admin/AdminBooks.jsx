@@ -1,6 +1,7 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaPlus, FaSearch, FaBook, FaSpinner, FaEdit, FaTrash } from "react-icons/fa";
+
 
 
 function AdminBooks() {
@@ -8,22 +9,18 @@ function AdminBooks() {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [form, setForm] = useState({
-    title: "",
-    author: "",
-    publishedDate: "",
-    publication: "",
-    description: "",
-    image: "",
-  });
 
+  // Fetch books from API
   const fetchBooks = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8000/api/v1/library/getbooks", { credentials: 'include' });
+      const res = await fetch("http://localhost:8000/api/v1/library/getbooks", { 
+        credentials: 'include' 
+      });
+      
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      
       const data = await res.json();
       if (data && data.Books) setBooks(data.Books);
       else setError("Unexpected response format");
@@ -38,108 +35,212 @@ function AdminBooks() {
     fetchBooks();
   }, []);
 
-  const handleChange = (e) => setForm((s) => ({ ...s, [e.target.name]: e.target.value }));
-
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:8000/api/v1/library/registerbook", {
-        method: "POST",
-        credentials: 'include',
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      // assume created book is in data.Books[0] or data.book
-      if (data && data.Books && data.Books.length > 0) {
-        setBooks((b) => [data.Books[0], ...b]);
-      } else if (data && data.book) {
-        setBooks((b) => [data.book, ...b]);
-      } else {
-        // fallback: refetch
-        await fetchBooks();
-      }
-      setShowForm(false);
-      setForm({ title: "", author: "", publishedDate: "", publication: "", description: "", image: "" });
-    } catch (err) {
-      setError(err.message || "Failed to create book");
-    }
-  };
+  // Filter books based on search term
   const filteredBooks = books.filter(book => 
-  book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  book.author.toLowerCase().includes(searchTerm.toLowerCase())
-);
+    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Loading skeleton
+  if (loading) {
+    return (
+      <div className="p-6 max-w-7xl mx-auto">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <FaSpinner className="w-12 h-12 text-indigo-600 animate-spin mx-auto mb-4" />
+            <p className="text-gray-600 text-lg font-medium">Loading books...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="p-6 max-w-7xl mx-auto">
+        <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-6">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-3 flex-1">
+              <h3 className="text-sm font-medium text-red-800">Error loading books</h3>
+              <p className="mt-2 text-sm text-red-700">{error}</p>
+              <button 
+                onClick={fetchBooks}
+                className="mt-3 text-sm font-medium text-red-600 hover:text-red-500"
+              >
+                Try again →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6">
-
-
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold text-white">Books Management</h1>
-        
+    <div className="p-6 max-w-7xl mx-auto">
+     
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
-          <button
-            onClick={() => { const nav = navigate; nav('/new-book'); }}
-            className="inline-flex items-center px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-            title="Add book"
-          >
-            <span className="text-lg font-bold mr-2">+</span>
-            Add Book
-          </button>
+          <h1 className="text-2xl font-bold text-black-900">Books Management</h1>
+          <p className="mt-1 text-sm text-black-500">
+            Manage your library's book collection
+          </p>
         </div>
+        
+        
+        <button
+          onClick={() => navigate('/new-book')}
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 
+                     text-white font-medium rounded-lg shadow-md hover:shadow-lg 
+                     hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 
+                     transition-all duration-200"
+        >
+          <FaPlus className="w-4 h-4" />
+          Add New Book
+        </button>
       </div>
-      <div className="mb-4 text-white">
+
+    
+      <div className="mb-6">
+        <div className="relative max-w-md">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FaSearch className="h-5 w-5 text-gray-400" />
+          </div>
           <input
             type="text"
-            placeholder ="Search books by title or author..."
+            placeholder="Search by title or author..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2         focus:ring-blue-500 "
+            className="block w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg 
+                       focus:ring-2 focus:ring-indigo-500 focus:border-transparent 
+                       text-gray-900 placeholder-gray-400
+                       transition-all duration-200"
           />
         </div>
+       
+        {searchTerm && (
+          <p className="mt-2 text-sm text-gray-600">
+            Found {filteredBooks.length} book(s) matching "{searchTerm}"
+          </p>
+        )}
+      </div>
 
-      {showForm && (
-        <div className="bg-white rounded-lg shadow p-4 mb-4">
-          <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <input name="title" value={form.title} onChange={handleChange} placeholder="Title" className="border p-2 rounded" required />
-            <input name="author" value={form.author} onChange={handleChange} placeholder="Author" className="border p-2 rounded" required />
-            <input name="publishedDate" value={form.publishedDate} onChange={handleChange} placeholder="Published Year" className="border p-2 rounded" />
-            <input name="publication" value={form.publication} onChange={handleChange} placeholder="Publication" className="border p-2 rounded" />
-            <input name="image" value={form.image} onChange={handleChange} placeholder="Image URL" className="border p-2 rounded col-span-1 md:col-span-2" />
-            <textarea name="description" value={form.description} onChange={handleChange} placeholder="Description" className="border p-2 rounded col-span-1 md:col-span-2" />
-            <div className="col-span-1 md:col-span-2 flex gap-2">
-              <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">Create</button>
-              <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-gray-300 rounded">Cancel</button>
+    
+      {filteredBooks.length === 0 ? (
+        // Empty state
+        <div className="text-center py-16 bg-white rounded-xl border-2 border-dashed border-gray-300">
+          <FaBook className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No books found</h3>
+          <p className="text-gray-500">
+            {searchTerm 
+              ? `No books match "${searchTerm}". Try a different search.`
+              : "Get started by adding your first book."
+            }
+          </p>
+          {!searchTerm && (
+            <button
+              onClick={() => navigate('/new-book')}
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white 
+                         rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              <FaPlus className="w-4 h-4" />
+              Add Your First Book
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredBooks.map((book) => (
+            <div
+              key={book._id}
+              className="group bg-white rounded-xl border border-gray-200 shadow-sm 
+                         hover:shadow-xl hover:-translate-y-1 transition-all duration-300 
+                         overflow-hidden"
+            >
+             
+              <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                {book.image ? (
+                  <>
+                    <img 
+                      src={book.image} 
+                      alt={book.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                    
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent 
+                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <FaBook className="w-16 h-16 text-gray-300" />
+                  </div>
+                )}
+                
+                
+                {book.publishedDate && (
+                  <div className="absolute top-3 right-3">
+                    <span className="px-2 py-1 bg-white/90 backdrop-blur-sm text-xs font-semibold 
+                                   text-gray-700 rounded-full shadow-sm">
+                      {book.publishedDate}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+             
+              <div className="p-4">
+               
+                <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2 
+                               group-hover:text-indigo-600 transition-colors">
+                  {book.title}
+                </h3>
+
+               
+                <p className="text-sm text-gray-600 mb-1">
+                  <span className="font-medium text-gray-700">By</span> {book.author}
+                </p>
+
+                <p className="text-sm text-gray-500 mb-3">
+                  {book.publication}
+                </p>
+
+               
+                {book.description && (
+                  <p className="text-xs text-gray-500 line-clamp-2 mb-4">
+                    {book.description}
+                  </p>
+                )}
+
+                <div className="flex gap-2">
+                  <button
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 
+                               bg-indigo-50 text-indigo-600 rounded-lg 
+                               hover:bg-indigo-100 transition-colors text-sm font-medium"
+                  >
+                    <FaEdit className="w-3.5 h-3.5" />
+                    Edit
+                  </button>
+                  <button
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 
+                               bg-red-50 text-red-600 rounded-lg 
+                               hover:bg-red-100 transition-colors text-sm font-medium"
+                  >
+                    <FaTrash className="w-3.5 h-3.5" />
+                    Delete
+                  </button>
+                </div>
+              </div>
             </div>
-          </form>
+          ))}
         </div>
       )}
-
-      <div className="bg-white rounded-lg shadow p-4">
-        {loading && <p>Loading books...</p>}
-        {error && <p className="text-red-600">Error: {error}</p>}
-
-        {!loading && !error && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredBooks.map((b) => (
-              <div key={b._id} className="border rounded-lg shadow-sm p-4 bg-white">
-                {b.image && (
-                  <img src={b.image} alt={b.title} className="w-full h-40 object-cover rounded mb-3" />
-                )}
-                <h3 className="font-semibold text-lg mb-1">{b.title}</h3>
-                <p className="text-sm text-gray-600">{b.author} · {b.publication}</p>
-                {b.description && <p className="mt-2 text-sm text-gray-700">{b.description}</p>}
-                <p className="mt-3 text-xs text-gray-400">{b.publishedDate || (b.createdAt ? new Date(b.createdAt).toLocaleDateString() : '')}</p>
-              </div>
-            ))}
-          {filteredBooks.length === 0 && (<p className="mt-2 col-span-full">{searchTerm ? `No books found matching "${searchTerm}"` : 'No books found.'}</p>)}
-          </div>
-        )}
-
-      </div>
     </div>
-  
   );
 }
 

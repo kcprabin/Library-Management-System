@@ -94,10 +94,10 @@ const Issue = () => {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold text-white">
+        <h1 className="text-3xl font-semibold text-gray-900">
           My Borrowed Books
         </h1>
-        <p className="text-sm text-white">
+        <p className="text-sm text-gray-600">
           Books currently issued to you
         </p>
       </div>

@@ -28,7 +28,7 @@ const StuCards = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-white mb-8">Student Dashboard</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-8">Student Dashboard</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
@@ -37,7 +37,7 @@ const StuCards = () => {
           <div className="bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition-transform duration-200 cursor-pointer">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-teal-100 text-sm font-medium mb-2">Available Books</p>
+                <p className="text-teal-100 text-sm font-medium mb-2 ">Available Books</p>
                 <p className="text-5xl font-bold">{stats.totalBooks}</p>
               </div>
               <div className="p-4 bg-teal-600 bg-opacity-30 rounded-full">
