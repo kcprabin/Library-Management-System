@@ -1,1 +1,1 @@
-export const DataBaseName = 'LibraryDATA'
+export const DataBaseName = 'Library'
