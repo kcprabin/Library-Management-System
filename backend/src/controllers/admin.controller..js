@@ -266,11 +266,12 @@ const getAllReturnedBooks = asyncHandler(async (req, res) => {
     const transformedBooks = returnedBooks.map(borrow => ({
       _id: borrow._id,
       book: borrow.bookId,
-      student: borrow.studentId,
+      user: borrow.studentId,
       issuedAt: borrow.borrowDate,
       returnDate: borrow.returnDate,
       returnedAt: borrow.returnedAt,
-      status: borrow.status
+      status: borrow.status,
+      updatedAt: borrow.updatedAt
     }));
 
     return res.status(200).json({
