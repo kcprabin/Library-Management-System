@@ -1,22 +1,6 @@
-const API_BASE_URL = 'http://localhost:8000/api/v1/library';
-// prabinnn apiiiii for admin parts 
-// edit books http://localhost:8000/api/v1/library/editbook/:bookId method PUT
-// delete books http://localhost:8000/api/v1/library/deletebook/:bookId  method DELETE
-// add books http://localhost:8000/api/v1/library/addbook  method POST
-// delete members http://localhost:8000/api/v1/library/deleteuser/:email already impleted 
-// add members http://localhost:8000/api/v1/library/addmember  already impleted
+const BACKEND = import.meta.env.VITE_BACKEND;
+const API_BASE_URL = `${BACKEND}/api/v1/library`;
 
-
-// for user 
-// get profile http://localhost:8000/api/v1/library/profile method GET
-// update profile http://localhost:8000/api/v1/library/updateprofile   method PUT
-
-// for student
-// borrow book http://localhost:8000/api/v1/library/borrowbook method POST
-// getBorrewed books info http://localhost:8000/api/v1/library/borrowedbooks method GET
-// get history http://localhost:8000/api/v1/library/history method GET
-
-// check hai tyo student books borrowed huda time backend mai xha update bhaxhina xhina natra hardcoded ki in frontend make it
 
 export const deleteBook = async (bookId) => {
     try{

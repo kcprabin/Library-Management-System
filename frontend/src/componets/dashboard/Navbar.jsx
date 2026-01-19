@@ -4,6 +4,8 @@ import { FaBars, FaBell, FaSearch, FaUserCircle } from 'react-icons/fa';
 import axios from 'axios';
 import { getUser } from '../../fetch';
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 const Navbar = ({ toggleSidebar }) => {
   const navigate = useNavigate();
   const [role, setRole] = useState('');
@@ -45,7 +47,7 @@ const Navbar = ({ toggleSidebar }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:8000/api/v1/library/logout",
+        `${BACKEND}/api/v1/library/logout`,
         {},
         { withCredentials: true }
       );

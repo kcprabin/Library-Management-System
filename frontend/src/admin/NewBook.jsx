@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 function NewBook() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -37,7 +39,7 @@ function NewBook() {
       fd.append("image", imageFile);
 
       const res = await fetch(
-        "http://localhost:8000/api/v1/library/registerbook",
+        `${BACKEND}/api/v1/library/registerbook`,
         {
           method: "POST",
           credentials: "include",

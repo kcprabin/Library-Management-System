@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import { deleteBook, editBook } from "../fetch";
 import ConfirmModal from "../componets/common/ConfirmModal";
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 
 
 function AdminBooks() {
@@ -21,7 +23,7 @@ function AdminBooks() {
   const fetchBooks = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8000/api/v1/library/getbooks", { 
+      const res = await fetch(`${BACKEND}/api/v1/library/getbooks`, { 
         credentials: 'include' 
       });
       
