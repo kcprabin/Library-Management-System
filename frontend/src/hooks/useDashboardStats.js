@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 export const useDashboardStats = () => {
   const [stats, setStats] = useState({
     totalMembers: 0,
@@ -17,7 +19,7 @@ export const useDashboardStats = () => {
         setLoading(true);
         setError(null);
 
-        const response = await fetch('http://localhost:8000/api/v1/library/dashboard-stats', {
+        const response = await fetch(`${BACKEND}/api/v1/library/dashboard-stats`, {
           credentials: 'include'
         });
 

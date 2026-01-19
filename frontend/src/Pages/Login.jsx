@@ -5,6 +5,8 @@ import { AuthContext } from '../context/authcontext';
 
 axios.defaults.withCredentials = true;
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [loginType, setLoginType] = useState('student');
@@ -21,7 +23,7 @@ const Login = () => {
     const checkAutoLogin = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:8000/api/v1/library/rememberme',
+          `${BACKEND}/api/v1/library/rememberme`,
           { withCredentials: true }
         );
 
@@ -45,7 +47,7 @@ const Login = () => {
     setError('');
     try {
       const response = await axios.post(
-        'http://localhost:8000/api/v1/library/login',
+        `${BACKEND}/api/v1/library/login`,
         { email, password, role: loginType },
         { withCredentials: true }
       );

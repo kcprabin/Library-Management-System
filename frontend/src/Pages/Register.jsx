@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 const Register = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,13 +68,13 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/library/register', {
+      const response = await axios.post(`${BACKEND}/api/v1/library/register`, {
         studentemail: formData.email,
         password: formData.password,
         userName: formData.username,
         role: selectedRole
       });
-
+      console.log(response)
 
       if (response.data.success) {
         navigate('/login', {
@@ -88,6 +90,7 @@ const Register = () => {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-50 via-purple-50 to-fuchsia-50 px-4 py-12">

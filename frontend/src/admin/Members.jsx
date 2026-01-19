@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaUserCircle, FaTrash, FaSpinner, FaFilter, FaUserPlus, FaDownload } from "react-icons/fa";
 import toast from "react-hot-toast";
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 function Members() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +58,7 @@ function Members() {
   const fetchMembers = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:8000/api/v1/library/members", {
+      const res = await fetch(`${BACKEND}/api/v1/library/members`, {
         method: "GET",
         credentials: "include",
       });
@@ -90,7 +92,7 @@ function Members() {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/api/v1/library/deleteuser/${email}`,
+        `${BACKEND}/api/v1/library/deleteuser/${email}`,
         { method: "DELETE", credentials: "include" }
       );
       console.log(email)

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FaBook, FaSpinner, FaSearch, FaCalendarAlt, FaUser, FaExclamationTriangle, FaClock } from 'react-icons/fa';
 
+const BACKEND = import.meta.env.VITE_BACKEND;
+
 
 const Issused = () => {
   const [issuedBooks, setIssuedBooks] = useState([]);
@@ -16,7 +18,7 @@ const Issused = () => {
   const fetchIssuedBooks = async () => {
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:8000/api/v1/library/issued-books', {
+      const res = await fetch(`${BACKEND}/api/v1/library/issued-books`, {
         credentials: 'include'
       });
       
