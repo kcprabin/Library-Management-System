@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const BACKEND = import.meta.env.VITE_BACKEND;
+const BACKEND = import.meta.env.VITE_BACKEND || "http://localhost:8000";
 
 export const useDashboardStats = () => {
   const [stats, setStats] = useState({

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaExclamationTriangle, FaSpinner, FaSearch, FaCalendarAlt, FaUser, FaBook } from 'react-icons/fa';
 
-const BACKEND = import.meta.env.VITE_BACKEND;
+const BACKEND = import.meta.env.VITE_BACKEND || "http://localhost:8000";
 
 const AdminNotReturn = () => {
   const [overdueBooks, setOverdueBooks] = useState([]);

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { deleteBook, editBook } from "../fetch";
 import ConfirmModal from "../componets/common/ConfirmModal";
 
-const BACKEND = import.meta.env.VITE_BACKEND;
+const BACKEND = import.meta.env.VITE_BACKEND || "http://localhost:8000";
 
 
 
