@@ -1,4 +1,4 @@
-const BACKEND = import.meta.env.VITE_BACKEND;
+const BACKEND = import.meta.env.VITE_BACKEND || "http://localhost:8000";
 const API_BASE_URL = `${BACKEND}/api/v1/library`;
 
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaBook, FaSpinner, FaSearch, FaCalendarAlt, FaUser, FaExclamationTriangle, FaClock } from 'react-icons/fa';
 
-const BACKEND = import.meta.env.VITE_BACKEND;
+const BACKEND = import.meta.env.VITE_BACKEND || "http://localhost:8000";
 
 
 const Issused = () => {

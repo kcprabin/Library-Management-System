@@ -5,7 +5,7 @@ import { AuthContext } from '../context/authcontext';
 
 axios.defaults.withCredentials = true;
 
-const BACKEND = import.meta.env.VITE_BACKEND;
+const BACKEND = import.meta.env.VITE_BACKEND || "http://localhost:8000";
 
 const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);

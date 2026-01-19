@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaSearch, FaUserCircle, FaTrash, FaSpinner, FaFilter, FaUserPlus, FaDownload } from "react-icons/fa";
 import toast from "react-hot-toast";
 
-const BACKEND = import.meta.env.VITE_BACKEND;
+const BACKEND = import.meta.env.VITE_BACKEND || "http://localhost:8000";
 
 function Members() {
   const [members, setMembers] = useState([]);
