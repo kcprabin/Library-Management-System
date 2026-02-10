@@ -28,6 +28,12 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    resetCode: {
+      type: Number,
+    },
+    resetCodeExpiry: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

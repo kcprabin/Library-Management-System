@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asynchandler.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
+
 const registerUser = asyncHandler(async (req, res) => {
   const { studentemail, password, userName, role } = req.body;
 
@@ -41,7 +42,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   const userCreated = await User.findById(user._id).select(
-    "-password -refreshtoken"
+    "-password -refreshtoken",
   );
   if (!userCreated) {
     return res.status(300).json({
@@ -99,7 +100,7 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   const { refreshToken, accessToken } = await generateRefreshTokenAndAccesToken(
-    user._id
+    user._id,
   );
 
   const options = {
@@ -133,7 +134,7 @@ const logout = asyncHandler(async (req, res) => {
         refreshtoken: null,
       },
     },
-    { new: true }
+    { new: true },
   );
 
   const options = {
@@ -163,7 +164,7 @@ const autoLogin = asyncHandler(async (req, res) => {
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN);
     const user = await User.findById(decodedToken._id).select(
-      "-password -refreshtoken"
+      "-password -refreshtoken",
     );
 
     if (!user) {
@@ -191,18 +192,18 @@ const autoLogin = asyncHandler(async (req, res) => {
 });
 
 const getProfile = asyncHandler(async (req, res) => {
-  const user = req.user
+  const user = req.user;
   res.status(200).json({
     success: true,
-    user: { 
+    user: {
       name: user.userName,
       email: user.studentemail,
       role: user.role,
-      createdate: user.createdAt
+      createdate: user.createdAt,
     },
   });
-})
-  
+});
+
 const updateProfile = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   if (!userId) {
@@ -213,11 +214,11 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
 
   const { userName, studentemail } = req.body;
-  if(!userName && !studentemail){
+  if (!userName && !studentemail) {
     return res.status(400).json({
       success: false,
       message: "No data to update",
-    }); 
+    });
   }
 
   const user = await User.findById(userId);
@@ -238,9 +239,9 @@ const updateProfile = asyncHandler(async (req, res) => {
     user: {
       name: user.userName,
       email: user.studentemail,
-      role: user.role
-    }
-  }); 
+      role: user.role,
+    },
+  });
 });
 
 const changePassword = asyncHandler(async (req, res) => {
@@ -292,7 +293,85 @@ const changePassword = asyncHandler(async (req, res) => {
   });
 });
 
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      message: "Email is required",
+    });
+  }
+
+  const user = await User.findOne({ studentemail: email });
+  if (!user) {
+    return res.status(400).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  const resetCode = Math.floor(Math.random() * 1000000); // Example reset code
+  user.resetCode = resetCode;
+  user.resetCodeExpiry = Date.now() + 3600000; // 1 hour expiry
+  await user.save({ validateBeforeSave: false });
+
+  try {
+    await mailSender(email, resetCode);
+  } catch (error) {
+    console.log(error, "Error sending reset email");
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send reset instructions",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Password reset instructions sent to email",
+  });
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+
+  const { email, resetCode, newPassword } = req.body;
+  if (!email || !resetCode || !newPassword) {
+    return res.status(400).json({
+      success: false,
+      message: "Email, reset code, and new password are required",
+    });
+  }
+
+  const user = await User.findOne({ studentemail: email });
+  if (!user) {
+    return res.status(400).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  if (
+    user.resetCode !== resetCode ||
+    user.resetCodeExpiry < Date.now()
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid or expired reset code",
+    });
+  }
+
+  user.password = newPassword;
+  user.resetCode = null;
+  user.resetCodeExpiry = null;
+  await user.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
+    message: "Password reset successfully",
+  });
+});
+
 export {
+  // Generate reset token and send email logic here
   registerUser,
   loginUser,
   logout,
@@ -300,4 +379,6 @@ export {
   getProfile,
   updateProfile,
   changePassword,
+  forgotPassword,
+  resetPassword,
 };
