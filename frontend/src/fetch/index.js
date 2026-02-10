@@ -241,3 +241,49 @@ export const returnBookApi = async (borrowId) => {
     throw error;
   }
 };
+
+export const forgotPassword = async (email) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/forgotpassword`, {
+      method: "POST",
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to send password reset email');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error in forgot password:', error);
+    throw error;
+  }
+};
+
+export const resetPassword = async (resetData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/resetpassword`, {
+      method: "POST",
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(resetData)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to reset password');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    throw error;
+  }
+};
