@@ -6,6 +6,8 @@ import StudentDashboard from "./Pages/StudentDashboard";
 import ProfileSettings from "./Pages/ProfileSettings";
 import AccountSettings from "./Pages/AccountSettings";
 import HelpSupport from "./Pages/HelpSupport";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 import Authcontext from './context/authcontext';
 import ProtectedRoute from './componets/common/ProtectedRoute';
 
@@ -31,6 +33,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/login" />}></Route>
             <Route path="/login" element={<Login />}/>
+            <Route path="/forgot-password" element={<ForgotPassword />}/>
+            <Route path="/reset-password" element={<ResetPassword />}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/new-book" element={<ProtectedRoute requiredRole="admin"><NewBook /></ProtectedRoute>} />
 

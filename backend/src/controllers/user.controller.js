@@ -332,7 +332,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
   });
 });
 
-const resetPassword = asyncHandler(async (req, res) => {
+const resetPassword = asyncHandler(async (req, res) => {c
 
   const { email, resetCode, newPassword } = req.body;
   if (!email || !resetCode || !newPassword) {
@@ -346,7 +346,7 @@ const resetPassword = asyncHandler(async (req, res) => {
   if (!user) {
     return res.status(400).json({
       success: false,
-      message: "User not found",
+      message: "User not found",  
     });
   }
 
