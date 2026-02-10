@@ -348,6 +348,7 @@ const verifyResetCode = asyncHandler(async (req, res) => {
       message: "User not found",
     });
   }
+  // final comments
 
   if (
     user.resetCode !== resetCode ||
