@@ -287,3 +287,26 @@ export const resetPassword = async (resetData) => {
     throw error;
   }
 };
+
+export const verifyResetCode = async (verifyData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/verifyresetcode`, {
+      method: "POST",
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(verifyData)
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to verify reset code');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error verifying reset code:', error);
+    throw error;
+  }
+};

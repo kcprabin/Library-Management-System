@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { resetPassword } from '../fetch';
+import { resetPassword, verifyResetCode } from '../fetch';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -8,12 +8,13 @@ const ResetPassword = () => {
   const [email, setEmail] = useState(location.state?.email || '');
   const [resetCode, setResetCode] = useState('');
   const [codeVerified, setCodeVerified] = useState(false);
+  const [verifyLoading, setVerifyLoading] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleVerifyCode = (e) => {
+  const handleVerifyCode = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -22,7 +23,23 @@ const ResetPassword = () => {
       return;
     }
 
-    setCodeVerified(true);
+    setVerifyLoading(true);
+    try {
+      const response = await verifyResetCode({
+        email,
+        resetCode: Number(resetCode)
+      });
+
+      if (response.success) {
+        setCodeVerified(true);
+      } else {
+        setError(response.message || 'Invalid reset code');
+      }
+    } catch (err) {
+      setError(err.message || 'Invalid reset code');
+    } finally {
+      setVerifyLoading(false);
+    }
   };
 
   const handleResetPassword = async (e) => {
@@ -129,9 +146,14 @@ const ResetPassword = () => {
 
             <button
               type="submit"
-              className="w-full rounded-xl border border-amber-200 bg-amber-50 py-3 text-sm font-semibold text-amber-700 transition-all hover:bg-amber-100"
+              disabled={verifyLoading}
+              className={`w-full rounded-xl border py-3 text-sm font-semibold transition-all ${
+                verifyLoading
+                  ? 'border-amber-200 bg-amber-50 text-amber-400'
+                  : 'border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100'
+              }`}
             >
-              {codeVerified ? 'Code Verified' : 'Verify Code'}
+              {verifyLoading ? 'Verifying...' : codeVerified ? 'Code Verified' : 'Verify Code'}
             </button>
           </form>
 

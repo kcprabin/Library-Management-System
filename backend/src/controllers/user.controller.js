@@ -332,8 +332,41 @@ const forgotPassword = asyncHandler(async (req, res) => {
   });
 });
 
-const resetPassword = asyncHandler(async (req, res) => {c
+const verifyResetCode = asyncHandler(async (req, res) => {  
+  const { email, resetCode } = req.body;
+  if (!email || !resetCode) {
+    return res.status(400).json({
+      success: false,
+      message: "Email and reset code are required",
+    });
+  }
 
+  const user = await User.findOne({ studentemail: email });
+  if (!user) {
+    return res.status(400).json({
+      success: false,
+      message: "User not found",
+    });
+  }
+
+  if (
+    user.resetCode !== resetCode ||
+    user.resetCodeExpiry < Date.now()
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid or expired reset code",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Reset code verified",
+  });
+}); 
+
+
+const resetPassword = asyncHandler(async (req, res) => {
   const { email, resetCode, newPassword } = req.body;
   if (!email || !resetCode || !newPassword) {
     return res.status(400).json({
@@ -342,11 +375,18 @@ const resetPassword = asyncHandler(async (req, res) => {c
     });
   }
 
+  if (newPassword.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message: "New password must be at least 6 characters",
+    });
+  }
+
   const user = await User.findOne({ studentemail: email });
   if (!user) {
     return res.status(400).json({
       success: false,
-      message: "User not found",  
+      message: "User not found",
     });
   }
 
@@ -381,5 +421,6 @@ export {
   updateProfile,
   changePassword,
   forgotPassword,
+  verifyResetCode,
   resetPassword,
 };
