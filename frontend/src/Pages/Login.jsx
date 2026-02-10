@@ -66,6 +66,7 @@ const Login = () => {
     }
   };
 
+
   if (loading) return <p className="text-center mt-10">Checking login...</p>;
 
   return (
@@ -155,6 +156,7 @@ const Login = () => {
                 </label>
               </div>
               <button
+                onClick={() => navigate('/forgot-password')}
                 type="button"
                 className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
               >
@@ -192,6 +194,7 @@ const Login = () => {
           )}
         </form>
       </div>
+
     </div>
   );
 };

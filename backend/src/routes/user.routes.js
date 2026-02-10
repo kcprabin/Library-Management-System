@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {registerUser,loginUser,logout,autoLogin,getProfile,updateProfile,changePassword} from "../controllers/user.controller.js";
+import {registerUser,loginUser,logout,autoLogin,getProfile,verifyResetCode,resetPassword,forgotPassword,updateProfile,changePassword} from "../controllers/user.controller.js";
 import { loginInCheck } from "../middleware/auth.middleware.js";
 
 
@@ -14,8 +14,9 @@ router.route("/rememberme").get(autoLogin)
 router.route("/profile").get( loginInCheck ,getProfile) 
 router.route("/updateprofile").put( loginInCheck ,updateProfile)
 router.route("/changepassword").post( loginInCheck ,changePassword)
-
-
+router.route("/resetpassword").post(resetPassword)
+router.route("/verifyresetcode").post(verifyResetCode)
+router.route("/forgotpassword").post(forgotPassword)
 
 
 
