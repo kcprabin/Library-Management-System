@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asynchandler.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
+import mailSender from "../middleware/mail.middleware.js";
 
 
 const registerUser = asyncHandler(async (req, res) => {
